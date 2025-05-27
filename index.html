@@ -232,12 +232,13 @@
     }
     #savedPasswords li {
         display: flex;
-        justify-content: space-between;
-        align-items: center;
+        flex-direction: column; /* จัดเรียงแนวตั้งบนหน้าจอเล็ก */
+        align-items: flex-start; /* จัดชิดซ้าย */
         padding: 10px 0;
         border-bottom: 1px solid var(--border-color);
         font-size: 1em;
         color: var(--text-color);
+        gap: 8px; /* ระยะห่างระหว่างรหัสผ่านและปุ่ม */
     }
     #savedPasswords li:last-child {
         border-bottom: none;
@@ -245,16 +246,38 @@
     #savedPasswords li span {
         flex-grow: 1; /* ให้รหัสผ่านขยายพื้นที่ */
         word-break: break-all; /* ให้รหัสผ่านยาวๆ ขึ้นบรรทัดใหม่ */
-        margin-right: 10px;
+        margin-right: 0; /* ลบ margin เดิมออก */
         font-family: 'Courier New', Courier, monospace; /* ใช้ฟอนต์ที่อ่านง่ายสำหรับรหัสผ่าน */
+        font-weight: bold; /* ทำให้รหัสผ่านเด่นขึ้น */
+        color: #555; /* สีเข้มขึ้น */
+    }
+    /* Group buttons for better layout */
+    .list-item-actions {
+        display: flex;
+        gap: 8px; /* ระยะห่างระหว่างปุ่ม */
+        width: 100%; /* ให้กลุ่มปุ่มเต็มความกว้าง */
+        flex-wrap: wrap; /* ให้ปุ่มขึ้นบรรทัดใหม่ถ้าพื้นที่ไม่พอ */
     }
     #savedPasswords li button {
-        margin-left: 8px;
-        padding: 6px 12px;
-        font-size: 0.85em; /* ลดขนาดปุ่มในรายการ */
+        margin-left: 0; /* ลบ margin เดิมออก */
+        padding: 8px 15px; /* ปรับขนาดปุ่ม */
+        font-size: 0.9em; /* ลดขนาดปุ่มในรายการเล็กน้อย */
         margin-top: 0;
         flex-shrink: 0; /* ไม่ให้ปุ่มหดตัว */
+        width: 100%; /* ทำให้ปุ่มเต็มความกว้างของกลุ่ม */
+        max-width: 120px; /* กำหนดความกว้างสูงสุดของปุ่ม */
+        box-sizing: border-box; /* ให้ padding และ border รวมอยู่ใน width */
     }
+    @media (min-width: 480px) { /* สำหรับหน้าจอที่กว้างขึ้นเล็กน้อย */
+        #savedPasswords li button {
+            width: auto; /* กลับไปใช้ auto width เมื่อมีพื้นที่มากขึ้น */
+            flex-grow: 1; /* ให้ปุ่มขยายตัวได้ */
+        }
+        .list-item-actions {
+            justify-content: flex-end; /* จัดปุ่มไปทางขวาเมื่อมีพื้นที่ */
+        }
+    }
+
     #savedPasswords li button:nth-of-type(1) { /* Copy button */
         background-color: var(--success-color);
         color: white;
@@ -287,8 +310,17 @@
         margin: 20px;
         padding: 15px;
       }
+      .header-container {
+        flex-direction: column; /* จัดเรียงแนวตั้ง */
+        align-items: flex-start; /* ชิดซ้าย */
+        gap: 10px; /* ระยะห่างระหว่างหัวข้อและปุ่ม */
+      }
       .header-container h1 {
         font-size: 1.8em;
+      }
+      .header-container #langBtn {
+        width: 100%; /* ทำให้ปุ่มเต็มความกว้าง */
+        text-align: center; /* จัดกึ่งกลางข้อความ */
       }
       .button-group button {
         flex-grow: 1;
@@ -301,6 +333,39 @@
         width: 90%;
         min-width: unset;
       }
+      /* Adjust font size for labels on smaller screens */
+      label, .form-group span {
+          font-size: 1em;
+      }
+    }
+
+    @media (max-width: 480px) { /* สำหรับอุปกรณ์มือถือที่เล็กมาก */
+        body {
+            margin: 10px;
+            padding: 10px;
+        }
+        .header-container h1 {
+            font-size: 1.5em;
+        }
+        #password {
+            font-size: 18px;
+            padding: 10px;
+        }
+        #savedPasswords li span {
+            font-size: 0.9em; /* ลดขนาดตัวอักษรของรหัสผ่านในรายการ */
+        }
+        #savedPasswords li button {
+            font-size: 0.8em; /* ลดขนาดตัวอักษรของปุ่มในรายการ */
+            padding: 6px 10px;
+        }
+        .list-item-actions {
+             flex-direction: column; /* ซ้อนปุ่มเป็นแนวตั้งในหน้าจอที่เล็กมาก */
+             align-items: stretch; /* ให้ปุ่มยืดเต็มความกว้าง */
+        }
+        #savedPasswords li button {
+            max-width: unset; /* ลบ max-width เพื่อให้ปุ่มยืดได้เต็ม */
+            width: 100%; /* ให้ปุ่มเต็มความกว้างในแนวตั้ง */
+        }
     }
   </style>
 </head>
@@ -341,7 +406,7 @@
 
   <div id="overlay" style="display: none;"></div>
   <div id="popup" style="display: none;">
-    <div id="popupText"></div> <button id="popupCloseBtn">ตกลง</button>
+  <div id="popupText"></div> <button id="popupCloseBtn">ตกลง</button>
   </div>
 
   <div id="savedPasswords">
@@ -608,6 +673,10 @@
         passwordSpan.textContent = password;
         listItem.appendChild(passwordSpan);
 
+        // สร้าง div สำหรับรวมปุ่ม
+        const actionsDiv = D.createElement("div");
+        actionsDiv.classList.add("list-item-actions");
+
         // ปุ่มคัดลอกสำหรับแต่ละรายการ
         const copyBtn = D.createElement("button");
         copyBtn.textContent = lang.listButtons.copy;
@@ -620,7 +689,7 @@
                 showToast(lang.messages.copyFail);
             }
         };
-        listItem.appendChild(copyBtn);
+        actionsDiv.appendChild(copyBtn);
 
         // ปุ่มลบสำหรับแต่ละรายการ
         const deleteBtn = D.createElement("button");
@@ -629,7 +698,9 @@
             elements.passwordList.removeChild(listItem);
             showToast(lang.messages.deleteSuccess);
         };
-        listItem.appendChild(deleteBtn);
+        actionsDiv.appendChild(deleteBtn);
+
+        listItem.appendChild(actionsDiv); // เพิ่ม div ที่มีปุ่มลงใน listItem
 
         elements.passwordList.appendChild(listItem);
         showToast(lang.messages.saveSuccess);
@@ -639,8 +710,9 @@
     function updateSavedPasswordsDisplay() {
         const lang = isThai ? translations.th : translations.en;
         Array.from(elements.passwordList.children).forEach(li => {
-            const copyBtn = li.querySelector('button:nth-of-type(1)');
-            const deleteBtn = li.querySelector('button:nth-of-type(2)');
+            // ค้นหาปุ่มภายใน div.list-item-actions
+            const copyBtn = li.querySelector('.list-item-actions button:nth-of-type(1)');
+            const deleteBtn = li.querySelector('.list-item-actions button:nth-of-type(2)');
             if (copyBtn) copyBtn.textContent = lang.listButtons.copy;
             if (deleteBtn) deleteBtn.textContent = lang.listButtons.delete;
         });
